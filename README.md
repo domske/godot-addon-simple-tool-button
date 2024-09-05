@@ -1,6 +1,6 @@
 # Godot Addon - Simple Tool Button
 
-A lightweight Godot addon that turns your bool button-like checkboxes into a real buttons. Just in place. Without changing the code logic or having dependencies. It's easier than you might think.
+A lightweight Godot addon that turns your bool button-like checkboxes into real buttons. Just in place. Without changing the code logic or having dependencies. It's easier than you might think.
 
 ![](assets/comparison.png)
 
