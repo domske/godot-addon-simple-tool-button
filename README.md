@@ -4,9 +4,12 @@ A lightweight Godot addon that turns your bool button-like checkboxes into real 
 
 ![](assets/comparison.png)
 
+
 ## Getting started
 
 Just download the addon and enable it in your project settings. Prefix your bool exports with `btn_` and enjoy your buttons. Reload the scene (Scene > Reload Saved Scene) if you see no buttons.
+
+<a href="https://godotengine.org/asset-library/asset/3313" target="_blank"><img src="https://github.com/user-attachments/assets/5d6ed3e8-02a3-4687-ab8e-0d5c22cd1cc2" alt="Simple Tool Button" width="300"></a>
 
 ## Example
 
