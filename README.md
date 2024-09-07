@@ -22,6 +22,22 @@ func update():
 
 This replaces the checkbox by a button.
 
+## Now in Color!
+
+<img src=".assets/colors.png" width="300" />
+
+There are four colors available that you can use as the second word.
+
+- `danger` (red)
+- `warning` (yellow)
+- `success` (green)
+- `info` (blue)
+
+```gdscript
+@export var btn_danger_delete: bool:
+  set(v): delete_all()
+```
+
 ## FAQ
 
 ### Why isn't this working?

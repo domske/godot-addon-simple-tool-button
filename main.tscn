@@ -4,5 +4,12 @@
 
 [node name="Node3D" type="Node3D"]
 
-[node name="MyTool" type="MeshInstance3D" parent="."]
+[node name="MyTool" type="Label3D" parent="."]
+pixel_size = 0.001
+text = "Button click count: 3"
+font_size = 64
+outline_size = 24
 script = ExtResource("1_rcosi")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
