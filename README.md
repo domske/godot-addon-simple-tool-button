@@ -58,7 +58,7 @@ Because this is currently the way to implement button-like behavior in Godot ins
 
 ### Can I change the color or show an icon?
 
-This addon just replaces the bool fake button with a real button. There is currently no option for color or icon for compatibility reasons. But I already have some ideas for implementation.
+You can change the color. See example above. But you can't set an icon yet. I already know how to do that. But I don't yet know how to pass this data to the plugin. Maybe in the next version.
 
 ## Support
 
