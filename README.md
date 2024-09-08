@@ -38,13 +38,50 @@ There are four colors available that you can use as the second word.
   set(v): delete_all()
 ```
 
+## Advanced buttons
+
+With advanced buttons you can use icons (build-in or custom) and more. See examplex:
+
+<img src=".assets/advanced.png" width="300" />
+
+```gdscript
+@export var btn_advanced = {
+  "icon": "res://icon.svg",
+  "color": "#FF00FF",
+  "text": "Awesome",
+  "click": func(): update(),
+}
+
+# Uses a built-in Godot icon called "Button". Try another like "Node".
+@export var btn_editor_icon = {
+  "icon": "Button",
+  "click": func(): update(),
+}
+```
+
+| Property | Description                                                                 |
+| -------- | --------------------------------------------------------------------------- |
+| click    | Function to call.                                                           |
+| icon     | Icon name of EditorIcons (see below) or path to your image (svg, png, etc). |
+| color    | Color name (see above) or custom hex string or Color object.                |
+| text     | Text for the button. Uses the variable name if not set.                     |
+
+All properties are optional. But a button without "click" makes no sense.
+
+> For EditorIcons see https://github.com/godotengine/godot/tree/master/editor/icons
+
+> Note: Changes within an exported dictations will not update until you change the variable name. You could rename, save and revert again.
+
+> Note: The advanced buttons require this addon. The bool buttons work without this addon.
+
 ## FAQ
 
 ### Why isn't this working?
 
-Oh, I hope Godot didn't change anything. Try one of the following:
+Try one of the following:
 
 - Reload the scene: Scene > Reload Saved Scene.
+- If you are using advanced buttons, try renaming the exported variable.
 - Re-enable the addon: Project > Project Settings... > Plugins.
 - Restart Godot.
 
@@ -58,7 +95,7 @@ Because this is currently the way to implement button-like behavior in Godot ins
 
 ### Can I change the color or show an icon?
 
-You can change the color. See example above. But you can't set an icon yet. I already know how to do that. But I don't yet know how to pass this data to the plugin. Maybe in the next version.
+Yes, you can change the color and icon. See examples above. Icons are only possible for advanced buttons (which requires this addon).
 
 ## Support
 

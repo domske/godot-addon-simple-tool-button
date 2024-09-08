@@ -10,6 +10,9 @@ text = "Button click count: 3"
 font_size = 64
 outline_size = 24
 script = ExtResource("1_rcosi")
+btn_advanced2 = null
+btn_custom_image2 = null
+btn_editor_icon2 = null
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)

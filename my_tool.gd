@@ -21,6 +21,25 @@ var click_count := 0
 @export var btn_info_info: bool:
   set(v): update()
 
+@export_category("Advanced buttons")
+
+@export var btn_advanced = {
+  "icon": "res://icons/check.svg",
+  "color": "#FF00FF",
+  "text": "Custom Icon",
+  "click": func(): update(),
+}
+
+@export var btn_custom_image = {
+  "icon": "res://icons/image.png",
+  "click": func(): update(),
+}
+
+@export var btn_editor_icon = {
+  "icon": "Button",
+  "click": func(): update(),
+}
+
 func update():
   click_count += 1
   text = "Button click count: " + str(click_count)
