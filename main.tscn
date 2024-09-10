@@ -6,13 +6,40 @@
 
 [node name="MyTool" type="Label3D" parent="."]
 pixel_size = 0.001
-text = "Button click count: 3"
+text = "Button click count: 11"
 font_size = 64
 outline_size = 24
 script = ExtResource("1_rcosi")
-btn_advanced2 = null
-btn_custom_image2 = null
-btn_editor_icon2 = null
+btn_advanced = [{
+"click": Callable(),
+"color": "#FF00FF",
+"icon": "res://icons/check.svg",
+"text": "Custom Icon"
+}]
+btn_custom_image = [{
+"click": Callable(),
+"icon": "res://icons/image.png"
+}]
+btn_editor_icon = [{
+"click": Callable(),
+"fill": true,
+"icon": "Button"
+}]
+btn_mutiple_buttons = [{
+"click": Callable(),
+"color": "success",
+"icon": "Play",
+"text": "Play"
+}, {
+"click": Callable(),
+"color": "danger",
+"icon": "Stop",
+"text": "Stop"
+}]
+btn_compat = {
+"click": Callable(),
+"icon": "Callable"
+}
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)

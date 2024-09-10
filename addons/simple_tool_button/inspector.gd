@@ -19,14 +19,11 @@ func _can_handle(object: Object) -> bool:
   return object is Node
 
 func _parse_property(object: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags: int, wide: bool) -> bool:
-
   if name.begins_with("btn_"):
-    var button = Button.new()
-    button.set("theme_override_styles/normal", new_style(Color(0.5, 0.5, 0.5, 0.1)))
-
     match(type):
       # Use bool setter as button. This buttons also works without this addon.
       TYPE_BOOL:
+        var button = create_button()
         var parts = name.split("_")
         var button_text = "_".join(parts.slice(1, parts.size()))
 
@@ -40,46 +37,78 @@ func _parse_property(object: Object, type: Variant.Type, name: String, hint_type
         button.text = button_text.capitalize()
         button.pressed.connect(func (): object[name] = true)
 
+        add_custom_control(button)
+        return true
+
       # Use dictonary to pass data to this addon. This button only works with this addon.
-      TYPE_DICTIONARY:
-        var value: Dictionary = object.get(name)
-        button.text = name.right(-4).capitalize()
+      TYPE_ARRAY, TYPE_DICTIONARY:
+        var button_list: Array
+        if type == TYPE_DICTIONARY:
+          var dict: Dictionary = object.get(name)
+          button_list = [dict]
+        else:
+          button_list = object.get(name)
 
-        if value.has("text"):
-          button.text = value.get("text")
+        var buttons_size := button_list.size()
 
-        if value.has("click"):
-          button.pressed.connect(value.get("click"))
+        var container := HBoxContainer.new()
+        container.alignment = BoxContainer.ALIGNMENT_CENTER;
 
-        if value.has("icon"):
-          var icon_value = value.get("icon")
-          var icon: Texture2D
-          if icon_value.begins_with("res://"):
-            icon = load(value.get("icon"))
-          else:
-            icon = EditorInterface.get_editor_theme().get_icon(icon_value, "EditorIcons")
-          if icon:
-            button.icon = icon
+        for button_index in range(buttons_size):
+          var button_item: Dictionary = button_list[button_index]
+          var button = create_button()
 
-        if value.has("color"):
-          var color_value: Variant = value.get("color")
-          var color: Color
-          if typeof(color_value) == TYPE_COLOR:
-            color = color_value
-          elif typeof(color_value) == TYPE_STRING:
-            if color_value.begins_with('#'):
-              color = Color.html(color_value)
-            elif colors.has(color_value):
-              color = colors.get(color_value)
-          if color:
-            set_color(button, color)
+          button.text = name.right(-4).capitalize()
+          if buttons_size > 1:
+            button.text += " " + str(button_index + 1)
 
-    add_custom_control(button)
-    return true
+          if button_item.has("text"):
+            button.text = button_item.get("text")
+
+          if button_item.has("click"):
+            button.pressed.connect(button_item.get("click"))
+
+          if button_item.has("icon"):
+            var icon_value = button_item.get("icon")
+            var icon: Texture2D
+            if icon_value.begins_with("res://"):
+              icon = load(button_item.get("icon"))
+            else:
+              icon = EditorInterface.get_editor_theme().get_icon(icon_value, "EditorIcons")
+            if icon:
+              button.icon = icon
+
+          if button_item.has("color"):
+            var color_value: Variant = button_item.get("color")
+            var color: Color
+            if typeof(color_value) == TYPE_COLOR:
+              color = color_value
+            elif typeof(color_value) == TYPE_STRING:
+              if color_value.begins_with('#'):
+                color = Color.html(color_value)
+              elif colors.has(color_value):
+                color = colors.get(color_value)
+            if color:
+              set_color(button, color)
+
+          if button_item.has("fill") and button_item.get("fill"):
+            button.size_flags_horizontal = Control.SIZE_EXPAND | Control.SIZE_FILL
+
+          container.add_child(button)
+
+        add_custom_control(container)
+        return true
+
   return false
+
+func create_button() -> Button:
+  var button := Button.new()
+  button.set("theme_override_styles/normal", new_style(Color(0.5, 0.5, 0.5, 0.1)))
+  return button
 
 func new_style(color: Color, alpha = color.a) -> StyleBox:
   var style_box := StyleBoxFlat.new()
+  style_box.set_corner_radius_all(5)
   if alpha:
     color.a = alpha
   style_box.bg_color = color

@@ -23,22 +23,48 @@ var click_count := 0
 
 @export_category("Advanced buttons")
 
-@export var btn_advanced = {
-  "icon": "res://icons/check.svg",
-  "color": "#FF00FF",
-  "text": "Custom Icon",
-  "click": func(): update(),
-}
+@export var btn_advanced: Array:
+  get: return [{
+    "icon": "res://icons/check.svg",
+    "color": "#FF00FF",
+    "text": "Custom Icon",
+    "click": func(): update(),
+  }]
 
-@export var btn_custom_image = {
-  "icon": "res://icons/image.png",
-  "click": func(): update(),
-}
+@export var btn_custom_image: Array:
+  get: return [{
+    "icon": "res://icons/image.png",
+    "click": func(): update(),
+  }]
 
-@export var btn_editor_icon = {
-  "icon": "Button",
-  "click": func(): update(),
-}
+@export var btn_editor_icon: Array:
+  get: return [{
+    "icon": "Button",
+    "fill": true,
+    "click": func(): update(),
+  }]
+
+@export var btn_mutiple_buttons: Array:
+  get: return [
+    {
+      "text": "Play",
+      "icon": "Play",
+      "color": "success",
+      "click": func(): update(),
+    },
+    {
+      "text": "Stop",
+      "icon": "Stop",
+      "color": "danger",
+      "click": func(): update(),
+    }
+  ]
+
+@export var btn_compat: Dictionary:
+  get: return {
+    "icon": "Callable",
+    "click": func(): update(),
+  }
 
 func update():
   click_count += 1
