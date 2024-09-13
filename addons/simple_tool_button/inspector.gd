@@ -2,11 +2,12 @@ extends EditorInspectorPlugin
 
 # NOTE Changes may require a restart (reload addon).
 
-# NOTE Advanced buttons variable names must be updated when Dictionary changed.
+# NOTE Advanced buttons variable names must be updated when value changed. Or use get without set.
 
 # See available EditorIcons:
-# print(EditorInterface.get_editor_theme().get_icon_list("EditorIcons"))
-# https://github.com/godotengine/godot/tree/master/editor/icons
+# - print(EditorInterface.get_editor_theme().get_icon_list("EditorIcons"))
+# - https://github.com/godotengine/godot/tree/master/editor/icons
+# - Autocomplete (CTRL + SPACE) should also show the icon in editor.
 
 var colors := {
   "danger": Color.html("#da1d0b"),
@@ -15,7 +16,13 @@ var colors := {
   "info": Color.html("#1a5ee5"),
 }
 
+# Advanced buttons only.
+var known_buttons: Dictionary = {}
+var current_node: Node
+
 func _can_handle(object: Object) -> bool:
+  current_node = object
+  known_buttons.clear()
   return object is Node
 
 func _parse_property(object: Object, type: Variant.Type, name: String, hint_type: PropertyHint, hint_string: String, usage_flags: int, wide: bool) -> bool:
@@ -53,47 +60,15 @@ func _parse_property(object: Object, type: Variant.Type, name: String, hint_type
 
         var container := HBoxContainer.new()
         container.alignment = BoxContainer.ALIGNMENT_CENTER;
+        known_buttons[name] = container
 
         for button_index in range(buttons_size):
           var button_item: Dictionary = button_list[button_index]
           var button = create_button()
-
           button.text = name.right(-4).capitalize()
           if buttons_size > 1:
             button.text += " " + str(button_index + 1)
-
-          if button_item.has("text"):
-            button.text = button_item.get("text")
-
-          if button_item.has("click"):
-            button.pressed.connect(button_item.get("click"))
-
-          if button_item.has("icon"):
-            var icon_value = button_item.get("icon")
-            var icon: Texture2D
-            if icon_value.begins_with("res://"):
-              icon = load(button_item.get("icon"))
-            else:
-              icon = EditorInterface.get_editor_theme().get_icon(icon_value, "EditorIcons")
-            if icon:
-              button.icon = icon
-
-          if button_item.has("color"):
-            var color_value: Variant = button_item.get("color")
-            var color: Color
-            if typeof(color_value) == TYPE_COLOR:
-              color = color_value
-            elif typeof(color_value) == TYPE_STRING:
-              if color_value.begins_with('#'):
-                color = Color.html(color_value)
-              elif colors.has(color_value):
-                color = colors.get(color_value)
-            if color:
-              set_color(button, color)
-
-          if button_item.has("fill") and button_item.get("fill"):
-            button.size_flags_horizontal = Control.SIZE_EXPAND | Control.SIZE_FILL
-
+          update_button(button, button_item, container)
           container.add_child(button)
 
         add_custom_control(container)
@@ -125,3 +100,64 @@ func set_color(button: Button, color: Color) -> void:
   button.set("theme_override_colors/font_hover_color", color)
   button.set("theme_override_colors/font_pressed_color", color.lightened(0.3))
   button.set("theme_override_colors/font_focus_color", color)
+
+func update_button(button: Button, props: Dictionary, container: HBoxContainer) -> void:
+  if props.has("text"):
+    button.text = props.get("text")
+
+  if props.has("click"):
+    var callable := Callable(props.get("click"))
+    button.pressed.connect(func():
+      var trigger_refresh = callable.call()
+      if trigger_refresh:
+        refresh()
+    )
+
+  if props.has("icon"):
+    var icon_value = props.get("icon")
+    var icon: Texture2D
+    if icon_value.begins_with("res://"):
+      icon = load(props.get("icon"))
+    else:
+      icon = EditorInterface.get_editor_theme().get_icon(icon_value, "EditorIcons")
+    if icon:
+      button.icon = icon
+
+  if props.has("color"):
+    var color_value: Variant = props.get("color")
+    var color: Color
+    if typeof(color_value) == TYPE_COLOR:
+      color = color_value
+    elif typeof(color_value) == TYPE_STRING:
+      if color_value.begins_with('#'):
+        color = Color.html(color_value)
+      elif colors.has(color_value):
+        color = colors.get(color_value)
+    if color:
+      set_color(button, color)
+
+  if props.has("fill"):
+    if props.get("fill"):
+      button.size_flags_horizontal = Control.SIZE_EXPAND | Control.SIZE_FILL
+    else:
+      button.size_flags_horizontal = 0
+
+  if props.has("align"):
+    var align = props.get("align")
+    match(align):
+      "begin": container.alignment = BoxContainer.ALIGNMENT_BEGIN;
+      "center": container.alignment = BoxContainer.ALIGNMENT_CENTER;
+      "end": container.alignment = BoxContainer.ALIGNMENT_END;
+
+func refresh():
+  # Is there no official way to refresh inspector?
+  for property_name in known_buttons:
+    var container: HBoxContainer = known_buttons[property_name]
+    var property_value = current_node.get(property_name)
+    if typeof(property_value) == TYPE_DICTIONARY:
+      property_value = [property_value]
+
+    for i in property_value.size():
+      var props: Dictionary = property_value[i]
+      props.erase("click")
+      update_button(container.get_child(i), props, container)

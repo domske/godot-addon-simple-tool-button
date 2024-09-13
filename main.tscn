@@ -6,7 +6,7 @@
 
 [node name="MyTool" type="Label3D" parent="."]
 pixel_size = 0.001
-text = "Button click count: 11"
+text = "Button click count: 3"
 font_size = 64
 outline_size = 24
 script = ExtResource("1_rcosi")
@@ -26,6 +26,7 @@ btn_editor_icon = [{
 "icon": "Button"
 }]
 btn_mutiple_buttons = [{
+"align": "end",
 "click": Callable(),
 "color": "success",
 "icon": "Play",
@@ -36,6 +37,24 @@ btn_mutiple_buttons = [{
 "icon": "Stop",
 "text": "Stop"
 }]
+btn_align = {
+"align": "begin",
+"click": Callable(),
+"icon": "HBoxContainer",
+"text": "Align begin"
+}
+btn_fill = [{
+"click": Callable(),
+"fill": false,
+"icon": "res://icons/x-expand.svg",
+"text": "Expand"
+}, {
+"text": "Another"
+}]
+btn_count = {
+"click": Callable(),
+"text": "Count: 3"
+}
 btn_compat = {
 "click": Callable(),
 "icon": "Callable"

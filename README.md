@@ -66,32 +66,43 @@ With advanced buttons you can use icons (build-in or custom), having multiple bu
     "click": func(): update(),
   }]
 
+var playing = false
 @export var btn_mutiple_buttons: Array:
   get: return [
     {
-      "text": "Play",
-      "icon": "Play",
-      "click": func(): update(),
+      "text": "Pause" if playing else "Play",
+      "icon": "Pause" if playing else "Play",
+      "align": "end",
+      "click": func():
+        playing = !playing
+        return true,
     },
     {
       "text": "Stop",
       "icon": "Stop",
-      "click": func(): update(),
+      "click": func():
+        playing = false
+        return true,
     }
   ]
 ```
 
-| Property | Description                                                                 |
-| -------- | --------------------------------------------------------------------------- |
-| click    | Function to call.                                                           |
-| icon     | Icon name of EditorIcons (see below) or path to your image (svg, png, etc). |
-| color    | Color name (see above) or custom hex string or Color object.                |
-| text     | Text for the button. Uses the variable name if not set.                     |
-| fill     | The button will use the full available width.                               |
+| Property | Description                                                                                |
+| -------- | ------------------------------------------------------------------------------------------ |
+| click    | Function to call.                                                                          |
+| icon     | Icon name of EditorIcons (see below) or path to your image (svg, png, etc).                |
+| color    | Color name (see above) or custom hex string or Color object.                               |
+| text     | Text for the button. Uses the variable name if not set.                                    |
+| fill     | The button will use the full available width.                                              |
+| align    | Aligns all buttons in row to "begin", "center" or "end". Depends left/right on LTR or RTL. |
 
 All properties are optional. But a button without "click" makes no sense.
 
 Since the you export an Array, you can use multiple buttons in row. You can also only return a Dictionary.
+
+A button can return true, to refresh all (advanced) buttons. For example to change the state of a button.
+
+<img src=".assets/dynamic-and-align.gif" width="300" />
 
 > For EditorIcons see https://github.com/godotengine/godot/tree/master/editor/icons (it should also be visible in autocomplete panel)
 
