@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://xytvht0yqnld"]
+[gd_scene load_steps=3 format=3 uid="uid://xytvht0yqnld"]
 
 [ext_resource type="Script" path="res://my_tool.gd" id="1_rcosi"]
+
+[sub_resource type="Curve" id="Curve_h7ok3"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -53,12 +55,13 @@ btn_fill = [{
 }]
 btn_count = {
 "click": Callable(),
-"text": "Count: 3"
+"text": "Count: 0"
 }
 btn_compat = {
 "click": Callable(),
 "icon": "Callable"
 }
+my_curve = SubResource("Curve_h7ok3")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
